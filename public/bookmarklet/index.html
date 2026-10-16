@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Our bookmarklets work just like our add-on — they make it easy to download YouTube videos as MP3 or MP4 files. Just drag the button to your bookmarks bar.">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:site_name" content="YTMP3">
+<meta property="og:title" content="Bookmarklet">
+<meta property="og:description" content="Our bookmarklets work just like our add-on — they make it easy to download YouTube videos as MP3 or MP4 files. Just drag the button to your bookmarks bar.">
+<meta property="og:url" content="/bookmarklet/">
+<meta property="og:image" content="/og.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="/favicon.ico">
+<title>YTMP3 - Bookmarklet</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="header">
+<div>
+<a href="/" aria-label="YTMP3 Home">
+<img src="/svg/1791996341/logo.svg" width="90" height="44" alt="YTMP3">
+</a>
+</div>
+<div>
+<a href="/">Home</a>
+<a href="/faq/">FAQ</a>
+<a href="/add-on/">Add-On</a>
+<a href="/bookmarklet/">Bookmarklet</a>
+</div>
+</div>
+<div class="text">
+<h1>Bookmarklets</h1>
+<p>Our bookmarklets work just like our add-on &mdash; they make it easy to <a href="/">download YouTube videos</a> as MP3 or MP4 files. The advantage is that you don't need to install anything: simply drag the "YouTube to MP3" or "YouTube to MP4" button into your bookmarks bar. That's it!</p>
+<p>Then simply go to YouTube and find the video you want to download. Open the video and click one of your bookmarklets. You'll be redirected to our site, where the conversion starts automatically. Once it's complete, you can download your file.</p>
+<div class="external">
+<a href="javascript:(()=>{var v=/(?:youtube\.com\/(?:embed\/|shorts\/)|[?&]v=)([a-zA-Z0-9-_]{11})/.exec(document.URL);if(v!==null)window.open('/#'+v[1]+'/mp3')})();" rel="nofollow">YouTube to MP3</a>
+<a href="javascript:(()=>{var v=/(?:youtube\.com\/(?:embed\/|shorts\/)|[?&]v=)([a-zA-Z0-9-_]{11})/.exec(document.URL);if(v!==null)window.open('/#'+v[1]+'/mp4')})();" rel="nofollow">YouTube to MP4</a>
+</div>
+<p>Please note: On mobile devices, bookmarklets can't be dragged into the bookmarks bar. Instead, create a new bookmark manually using the values below.</p>
+<div class="card">
+<div>
+<label for="name">Bookmark Name</label>
+<input id="name" type="text" name="text" value="YouTube to MP3" readonly>
+</div>
+<div>
+<label for="url">Bookmark URL</label>
+<textarea id="url" name="url" readonly>javascript:(()=>{var v=/(?:youtube\.com\/(?:embed\/|shorts\/)|[?&]v=)([a-zA-Z0-9-_]{11})/.exec(document.URL);if(v!==null)window.open('/#'+v[1]+'/mp3')})();</textarea>
+</div>
+</div>
+<p>By using our bookmarklets, you agree to our <a href="/terms-of-use/">Terms of Use</a>.</p>
+</div>
+<div class="footer">
+<a href="/contact/">Contact</a>
+<a href="/copyright-claims/">Copyright Claims</a>
+<a href="/privacy-policy/">Privacy Policy</a>
+<a href="/terms-of-use/">ToU</a>
+</div>
+</body>
+</html>

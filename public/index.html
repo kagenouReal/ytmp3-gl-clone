@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Download YouTube videos as MP3 or MP4 with YTMP3. Our converter is free to use and doesn't require any sign-up or subscription.">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:site_name" content="YTMP3">
+<meta property="og:title" content="YouTube to MP3 Converter">
+<meta property="og:description" content="Download YouTube videos as MP3 or MP4 with YTMP3. Our converter is free to use and doesn't require any sign-up or subscription.">
+<meta property="og:url" content="/">
+<meta property="og:image" content="/og.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="/favicon.ico">
+<title>YTMP3 - YouTube to MP3 Converter</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="header">
+<div>
+<a href="/" aria-label="YTMP3 Home">
+<img src="/svg/1791996341/logo.svg" width="90" height="44" alt="YTMP3">
+</a>
+</div>
+<div>
+<a href="/">Home</a>
+<a href="/faq/">FAQ</a>
+<a href="/add-on/">Add-On</a>
+<a href="/bookmarklet/">Bookmarklet</a>
+</div>
+</div>
+<form autocomplete="off" method="post" id="converter-form">
+<label for="link" id="form-label">Paste your YouTube link</label>
+<div class="form__input" id="input-container">
+<input id="link" type="text" name="link" placeholder="youtube.com/watch?v=" autofocus required>
+<button type="submit" id="submit-btn">Convert</button>
+</div>
+<div class="form__format" id="format-row">Format: <span id="format-text">MP3</span> (<a href="#" class="mp4" id="format-toggle">change to MP4</a>)</div>
+</form>
+<div class="text">
+<h1>YouTube to MP3 Converter</h1>
+<p>YTMP3 is an online YouTube to MP3 converter that lets you convert YouTube videos to MP3 or MP4 files and download them. Our service is completely free and requires no sign-up or subscription. YTMP3 works on any device &mdash; all you need is a modern web browser. By using our service, you agree to our <a href="/terms-of-use/">Terms of Use</a>.</p>
+<p class="b">How to use YTMP3</p>
+<ol>
+<li>Go to YouTube.com and find the video you want to download.</li>
+<li>Copy the video link and paste it into the converter above.</li>
+<li>Choose a format. By default, videos are converted to MP3. To switch formats, simply click the "change to &hellip;" link.</li>
+<li>Click the "Convert" button to start the conversion. Depending on the length of the video and the selected format, this may take a moment. Once the conversion is complete, click the "Download" button to save your file.</li>
+</ol>
+<p>Thank you for using our YouTube to MP3 converter!</p>
+</div>
+<div class="footer">
+<a href="/contact/">Contact</a>
+<a href="/copyright-claims/">Copyright Claims</a>
+<a href="/privacy-policy/">Privacy Policy</a>
+<a href="/terms-of-use/">ToU</a>
+</div>
+<script>
+(() => {
+const form = document.getElementById('converter-form');
+const label = document.getElementById('form-label');
+const inputContainer = document.getElementById('input-container');
+const formatRow = document.getElementById('format-row');
+const formatText = document.getElementById('format-text');
+const formatToggle = document.getElementById('format-toggle');
+let currentFormat = 'mp3';
+let isConverting = false;
+function setFormat(fmt) {
+currentFormat = fmt.toLowerCase();
+if (currentFormat === 'mp3') {
+formatText.textContent = 'MP3';
+formatToggle.className = 'mp4';
+formatToggle.textContent = 'change to MP4';
+} else {
+formatText.textContent = 'MP4';
+formatToggle.className = 'mp3';
+formatToggle.textContent = 'change to MP3';
+}
+}
+formatToggle.addEventListener('click', (e) => {
+e.preventDefault();
+setFormat(currentFormat === 'mp3' ? 'mp4' : 'mp3');
+});
+function resetForm() {
+isConverting = false;
+label.textContent = 'Paste your YouTube link';
+inputContainer.className = 'form__input';
+inputContainer.innerHTML = '<input id="link" type="text" name="link" placeholder="youtube.com/watch?v=" autofocus required><button type="submit" id="submit-btn">Convert</button>';
+formatRow.innerHTML = 'Format: <span id="format-text">' + currentFormat.toUpperCase() + '</span> (<a href="#" class="' + (currentFormat === 'mp3' ? 'mp4' : 'mp3') + '" id="format-toggle">change to ' + (currentFormat === 'mp3' ? 'MP4' : 'MP3') + '</a>)';
+document.getElementById('format-toggle').addEventListener('click', (e) => {
+e.preventDefault();
+setFormat(currentFormat === 'mp3' ? 'mp4' : 'mp3');
+});
+}
+function renderProgress(msg) {
+inputContainer.className = 'form__input form__progress';
+inputContainer.innerHTML = '<span class="form__loader"></span><span style="font-size:14px;">' + (msg || 'preparing conversion') + '</span>';
+formatRow.innerHTML = '&nbsp;';
+}
+function renderDownload(title, downloadURL) {
+if (title) label.textContent = title;
+inputContainer.className = 'form__input form__download';
+inputContainer.innerHTML = '';
+const dlBtn = document.createElement('button');
+dlBtn.type = 'button';
+dlBtn.textContent = 'Download';
+dlBtn.onclick = () => {
+window.open(downloadURL, '_blank', 'noopener');
+};
+const moreBtn = document.createElement('button');
+moreBtn.type = 'button';
+moreBtn.textContent = 'Convert more';
+moreBtn.onclick = () => {
+  window.location.reload();
+};
+inputContainer.appendChild(dlBtn);
+inputContainer.appendChild(moreBtn);
+}
+function renderError(errMessage) {
+label.textContent = errMessage || 'Conversion error';
+inputContainer.className = 'form__input form__error';
+inputContainer.innerHTML = '';
+const backBtn = document.createElement('button');
+backBtn.type = 'button';
+backBtn.textContent = 'Back';
+backBtn.onclick = () => {
+resetForm();
+};
+inputContainer.appendChild(backBtn);
+formatRow.innerHTML = '&nbsp;';
+}
+function extractVideoId(url) {
+try {
+const match = /(?:youtu\.be\/|youtube\.com\/(?:embed\/|live\/|shorts\/)|[?&]v=)([a-zA-Z0-9-_]{11})/.exec(url);
+return match ? match[1] : null;
+} catch {
+return null;
+}
+}
+async function pollJob(jobId) {
+const start = Date.now();
+const stageNames = ['checking video', 'extracting video', 'converting video'];
+let pollCount = 0;
+while (Date.now() - start < 8 * 60 * 1000) {
+await new Promise(r => setTimeout(r, 1800));
+try {
+const res = await fetch('/api/status?id=' + encodeURIComponent(jobId));
+const data = await res.json();
+if (!res.ok || !data.success) {
+renderError(data.error || 'Unable to check conversion status.');
+return;
+}
+const job = data.job;
+if (job.status === 'queued') {
+renderProgress('preparing conversion');
+} else if (job.status === 'processing') {
+pollCount++;
+const stage = stageNames[Math.min(Math.floor(pollCount / 2), 2)];
+renderProgress(stage + ' (' + currentFormat.toUpperCase() + ')');
+} else if (job.status === 'completed') {
+renderDownload(job.title || 'Your file is ready', job.downloadURL);
+return;
+} else if (job.status === 'failed') {
+renderError(job.error || 'Conversion failed. Please check the video link.');
+return;
+}
+} catch (e) {
+renderProgress('reconnecting...');
+}
+}
+renderError('Conversion timed out. Please try again.');
+}
+async function startConversion(url) {
+if (isConverting) return;
+const videoId = extractVideoId(url);
+if (!videoId) {
+renderError('Error 0.0: Enter a valid YouTube video link');
+return;
+}
+isConverting = true;
+renderProgress('preparing conversion');
+try {
+const res = await fetch('/api/create', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ url: 'https://www.youtube.com/watch?v=' + videoId, format: currentFormat }),
+});
+const data = await res.json();
+if (!res.ok || !data.success) {
+renderError(data.error || 'Could not queue the conversion.');
+return;
+}
+await pollJob(data.job.id);
+} catch (e) {
+renderError('Failed to start conversion. Check internet connection.');
+}
+}
+form.addEventListener('submit', (e) => {
+e.preventDefault();
+const input = document.getElementById('link');
+if (!input) return;
+startConversion(input.value.trim());
+});
+if (window.location.hash && window.location.hash.indexOf('/') > -1) {
+const parts = window.location.hash.slice(1).split('/');
+if (/^[a-zA-Z0-9-_]{11}$/.test(parts[0]) && /^(mp3|mp4)$/.test(parts[1])) {
+setFormat(parts[1]);
+startConversion('https://www.youtube.com/watch?v=' + parts[0]);
+}
+}
+})();
+</script>
+</body>
+</html>
